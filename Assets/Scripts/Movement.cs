@@ -1,24 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Burst.CompilerServices;
-using Unity.VisualScripting;
-using UnityEditor;
-using UnityEditor.Timeline;
 using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
-    private float _horizontal = 0;
-    private float _vertical = 0;
-    private float _moveSpeed = 5f;
     private Rigidbody2D _rb;
-    private bool _isClimbing;
-    private float _rotationSpeed = 1f;
+    private float _horizontal;
+    private float _vertical;
 
-    public Vector2 boxSize = new Vector2(2,2);
-    public float groundCastDistance = 10f;
-    public float wallCastDistance = 10f;
-    [SerializeField] private LayerMask groundLayer;
+    public float _moveSpeed = 5f;
+    public Vector2 boxSize = new Vector2(1f, 2f);
+    public float groundCastDistance = 0.1f;
+    public float wallCastDistance = 0.1f;
+    public LayerMask groundLayer;
+    public float _rotationSpeed = 10f;
+
+    private Vector3 _direction; // 1 if facing right, -1 if facing left
 
     void Start()
     {
@@ -27,95 +22,111 @@ public class Movement : MonoBehaviour
 
     void Update()
     {
-
+        // Get horizontal and vertical input
         _horizontal = Input.GetAxisRaw("Horizontal");
+        _vertical = Input.GetAxisRaw("Vertical");
 
-        // If the player is next to a wall, rotate them 
-        if (IsNextToAWall())
+        if (IsNextToAWall() && (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D)))
         {
-            Debug.Log("Is next to a wall");
+            RotateToAlignWithWall();
         }
 
-
-        // If player is next to a wall, pressing W should let them rotate then walk
-        if (Input.GetKeyDown(KeyCode.W) && !_isClimbing)
+        if (!IsNextToAWall())
         {
-            // the way the player is facing
-            Vector2 direction = Vector2.right * Mathf.Sign(Input.GetAxis("Horizontal"));
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, 1f);
-            Debug.Log(hit);
-
-            if (hit.collider != null && Mathf.Abs(hit.normal.x) > 0.1f)
-            {
-                StartClimbing(hit.normal);
-            }
-        }
-
-        // Handle climbing movement if currently climbing
-        else if (_isClimbing)
-        {
-            _vertical = Input.GetAxis("Vertical");
+            HandleMovement();
         }
     }
 
     private bool IsGrounded()
     {
-        // Check that the player is grounded 
-        if (Physics2D.BoxCast(transform.position, boxSize, 0, -transform.up, groundCastDistance, groundLayer))
-        {
-            return true;
-        }
-        else 
-        { 
-            return false; 
-        }
+        // Check if the player is grounded
+        RaycastHit2D hit = Physics2D.BoxCast(transform.position, boxSize, 0, -transform.up, groundCastDistance, groundLayer);
+        return hit.collider != null;
     }
 
     private bool IsNextToAWall()
     {
-        // Check that the player is next to and facing a wall
-        if (Physics2D.BoxCast(transform.position, boxSize, 0, transform.forward, wallCastDistance, groundLayer))
+        // Check if the player is next to and facing a wall
+        Vector2 boxCastOrigin = transform.position + _direction * (boxSize.y / 2);
+        RaycastHit2D hit = Physics2D.BoxCast(boxCastOrigin, boxSize, 0, _direction, wallCastDistance, groundLayer);
+        return hit.collider != null;
+    }
+
+    private void RotateToAlignWithWall()
+    {
+        // Rotate the player
+        float angle = CalculateRotateAngle();
+
+        // Rotate the player
+        transform.Rotate(0, 0, angle);
+
+        // Rotate the _direction vector by the calculated angle
+        Quaternion rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+
+        // Apply the rotation to the _direction vector
+        _direction = rotation * _direction;
+    }
+
+    private void HandleMovement()
+    {
+        // If grounded, handle vertical movement as well
+        if (IsGrounded())
         {
-            return true;
-        }
-        else
-        {
-            return false;
+            if (IsPlayerMovingVertical())
+            {
+                // Is player movement vertical
+                // If moving, check direction 
+                if (_vertical != 0) _direction.y = (int)(Mathf.Sign(_vertical));
+                _rb.velocity = new Vector2(_rb.velocity.x, _vertical * _moveSpeed);
+            }
+            else
+            {
+                // If moving, check direction 
+                if (_horizontal != 0) { _direction.x = (int)Mathf.Sign(_horizontal); }
+
+                _rb.velocity = new Vector2(_horizontal * _moveSpeed, _rb.velocity.y);
+            }
         }
     }
 
-    private void FixedUpdate()
+    private bool IsPlayerMovingVertical()
     {
-        // Move player only if grounded
-        if (IsGrounded())
+        // Check that the vertical (W and D) movement is perpendicular to the wall
+        Vector2 verticalDirection = Vector2.up;
+        Vector2 playerDownDirection = -transform.up;
+        float dotProduct = Vector2.Dot(verticalDirection, playerDownDirection);
+
+        return Mathf.Abs(dotProduct) < 0.01f; // Using a small threshold for floating point precision
+    }
+
+    private float CalculateRotateAngle()
+    {
+        // Get the player's down direction and right direction
+        Vector2 downDir = -transform.up;
+
+        // Calculate the angle between downDirection and rightDirection
+        float angle = Vector2.Angle(downDir, _direction);
+
+        // clockwise or counterclockwise
+        float crossProduct = downDir.x * _direction.y - downDir.y * _direction.x;
+        if (crossProduct < 0)
         {
-            _rb.velocity = new Vector2(_horizontal * _moveSpeed, _vertical * _moveSpeed);
+            angle = -angle;
         }
-        else
-        {
-            _rb.velocity = Vector2.zero;
-        }
+
+        return angle;
     }
 
     private void OnDrawGizmos()
     {
-        // Visualize raycast 
-        Gizmos.DrawWireCube(transform.position - transform.forward * wallCastDistance, boxSize);
-    }
+        // Wall detection box
+        Gizmos.color = Color.red;
+        Vector3 boxCenter = transform.position + _direction * (wallCastDistance / 2);
+        Gizmos.DrawWireCube(boxCenter, boxSize);
 
-    void StartClimbing(Vector2 wallNormal)
-    {
-        _isClimbing = true;
-
-        // Rotate the player to face the wall
-        float angle = Mathf.Atan2(wallNormal.y, wallNormal.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.AngleAxis(angle - 90f, Vector3.forward), _rotationSpeed * Time.deltaTime);
-    }
-
-    void ClimbWall()
-    {
-        // Move up or down the wall with W and S keys
-        _vertical = Input.GetAxis("Vertical");
-
+        // Ground detection box
+        Gizmos.color = Color.blue;
+        Vector3 groundBoxCenter = transform.position - transform.up * (groundCastDistance / 2);
+        Gizmos.DrawWireCube(groundBoxCenter, boxSize);
     }
 }

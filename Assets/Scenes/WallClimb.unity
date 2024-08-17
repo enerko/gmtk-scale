@@ -3025,11 +3025,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4910ba7a16654d45a7970db78f6ce9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boxSize: {x: 2, y: 2}
-  castDistance: 10
+  _moveSpeed: 5
+  boxSize: {x: 0.5, y: 0.5}
+  groundCastDistance: 1
+  wallCastDistance: 1
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
+  _rotationSpeed: 1
 --- !u!212 &1672232592
 SpriteRenderer:
   m_ObjectHideFlags: 0
