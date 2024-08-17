@@ -77,14 +77,14 @@ public class Movement : MonoBehaviour
                 // Is player movement vertical
                 // If moving, check direction 
                 if (_vertical != 0) _direction.y = (int)(Mathf.Sign(_vertical));
-                _rb.velocity = new Vector2(_rb.velocity.x, _vertical * _moveSpeed);
+                _rb.velocity = new Vector2(0, _vertical * _moveSpeed);
             }
             else
             {
                 // If moving, check direction 
                 if (_horizontal != 0) { _direction.x = (int)Mathf.Sign(_horizontal); }
 
-                _rb.velocity = new Vector2(_horizontal * _moveSpeed, _rb.velocity.y);
+                _rb.velocity = new Vector2(_horizontal * _moveSpeed, 0);
             }
         }
     }
