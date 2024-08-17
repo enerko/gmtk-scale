@@ -29,7 +29,7 @@ public class canvasManager : MonoBehaviour
         {
             stamina+=0.5f;
         }
-        if(stamina<-420)
+        if(stamina<-470)
         {
             stamLost=true;
         }
@@ -48,7 +48,7 @@ public class canvasManager : MonoBehaviour
             if(stamina>-1)
             {
                 stamLost=false;
-                image.color = new Color(255, 255, 255, t);
+                image.color = new Color(255, 255, 255, 1f);
             }
             
         }
