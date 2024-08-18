@@ -67,7 +67,7 @@ public class Movement : MonoBehaviour
                 isExtending=false;
             }
         }
-        if(Input.GetMouseButton(0))
+        if(Input.GetMouseButton(1))
         {
             if(!isSwinging)
             {
@@ -77,16 +77,16 @@ public class Movement : MonoBehaviour
             {
                 transform.GetComponent<DistanceJoint2D>().enabled=true;
                 transform.GetComponent<DistanceJoint2D>().connectedAnchor=new Vector2(tonguePosX,tonguePosY);
+                transform.GetComponent<DistanceJoint2D>().distance+=Input.GetAxis("Mouse ScrollWheel")*4;
 
                 
 
                 points[0] = new Vector3(transform.position.x, transform.position.y, -0.7f);
                 points[1] = new Vector3(tongue.transform.position.x, tongue.transform.position.y, -0.7f);
-                Debug.Log(tongue.transform.position);
                 tongue.transform.GetComponent<LineRenderer>().SetPositions(points);
             }
         }
-        if(Input.GetMouseButtonUp(0))
+        if(Input.GetMouseButtonUp(1))
         {
             isSwinging=false;
             isExtending=false;
