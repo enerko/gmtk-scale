@@ -9,6 +9,7 @@ public class Movement : MonoBehaviour
     private bool isSwinging=false, isExtending=false, isFound=false;
     private Vector3 point = new Vector3(), pointIn= new Vector3();
     private Vector3[] points = new Vector3[2];
+    private bool isOverheated=false;
 
     public float _moveSpeed = 5f;
     public Vector2 boxSize = new Vector2(1f, 2f);
@@ -18,6 +19,7 @@ public class Movement : MonoBehaviour
     public float _rotationSpeed = 10f;
     public Camera MainCam;
     public GameObject tongue;
+    public Canvas canvas;
 
     private Vector3 _direction; // 1 if facing right, -1 if facing left
 
@@ -67,7 +69,7 @@ public class Movement : MonoBehaviour
                 isExtending=false;
             }
         }
-        if(Input.GetMouseButton(1))
+        if(Input.GetMouseButton(1) && !isOverheated)
         {
             if(!isSwinging)
             {
@@ -75,9 +77,18 @@ public class Movement : MonoBehaviour
             }
             else
             {
+                canvas.GetComponent<CanvasManager>().StaminaDeplete();
                 transform.GetComponent<DistanceJoint2D>().enabled=true;
                 transform.GetComponent<DistanceJoint2D>().connectedAnchor=new Vector2(tonguePosX,tonguePosY);
                 transform.GetComponent<DistanceJoint2D>().distance+=Input.GetAxis("Mouse ScrollWheel")*4;
+                if(Input.GetAxis("Mouse ScrollWheel")<0)
+                {
+                    canvas.GetComponent<CanvasManager>().StaminaDeplete();
+                }
+                if(Input.GetAxis("Mouse ScrollWheel")<0)
+                {
+                    canvas.GetComponent<CanvasManager>().StaminaIncrease();
+                }
 
                 
 
@@ -95,10 +106,27 @@ public class Movement : MonoBehaviour
             isFound=false;
             tongue.transform.position= new Vector2(transform.position.x,transform.position.y);
         }
+        if(isOverheated)
+        {
+            isSwinging=false;
+            isExtending=false;
+            transform.GetComponent<DistanceJoint2D>().enabled=false;
+            tongue.SetActive(false);
+            isFound=false;
+            tongue.transform.position= new Vector2(transform.position.x,transform.position.y);
+        }
     }
     public void foundPath()
     {
         isFound=true;
+    }
+    public void OverHeat()
+    {
+        isOverheated=true;
+    }
+    public void CoolDown()
+    {
+        isOverheated=false;
     }
     private bool IsGrounded()
     {
@@ -114,7 +142,6 @@ public class Movement : MonoBehaviour
         RaycastHit2D hit = Physics2D.BoxCast(boxCastOrigin, boxSize, 0, _direction, wallCastDistance, groundLayer);
         return hit.collider != null;
     }
-
     private void RotateToAlignWithWall()
     {
         // Rotate the player
