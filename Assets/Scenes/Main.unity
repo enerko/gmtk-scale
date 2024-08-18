@@ -193,7 +193,7 @@ GameObject:
   - component: {fileID: 114063038}
   - component: {fileID: 114063037}
   - component: {fileID: 114063036}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Path
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1272,6 +1272,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4910ba7a16654d45a7970db78f6ce9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _moveSpeed: 5
+  boxSize: {x: 0.5, y: 0.5}
+  groundCastDistance: 1
+  wallCastDistance: 1
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  _rotationSpeed: 10
 --- !u!1001 &554752861
 PrefabInstance:
   m_ObjectHideFlags: 0
