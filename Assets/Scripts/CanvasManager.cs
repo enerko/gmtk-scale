@@ -58,14 +58,14 @@ public class CanvasManager : MonoBehaviour
         staminaBar.GetComponent<RectTransform>().sizeDelta=new Vector2(stamVal,0);
         if(isStamLost)
         {
-            player.GetComponent<Movement>().OverHeat();
+            player.GetComponent<SwingScript>().OverHeat();
             time+=Time.deltaTime;
             t=-Mathf.Cos(5*time)/4+0.75f;
             image.color = new Color(255, 0, 0, t);
             if(stamVal>-1)
             {
                 isStamLost=false;
-                player.GetComponent<Movement>().CoolDown();
+                player.GetComponent<SwingScript>().CoolDown();
                 image.color = new Color(255, 255, 255, 1f);
             }
             

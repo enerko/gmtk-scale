@@ -20,7 +20,7 @@ public class TongueCollide : MonoBehaviour
     {
         if(other.tag=="Path")
         {
-            player.GetComponent<Movement>().foundPath();
+            player.GetComponent<SwingScript>().foundPath();
         }
     }
 }
