@@ -5,9 +5,10 @@ public class Movement : MonoBehaviour
     private Rigidbody2D _rb;
     private float _horizontal;
     private float _vertical;
-    private float mousePosX,mousePosY;
-    private bool isSwinging=false;
-    private Vector3 point = new Vector3();
+    private float tonguePosX,tonguePosY, distance;
+    private bool isSwinging=false, isExtending=false, isFound=false;
+    private Vector3 point = new Vector3(), pointIn= new Vector3();
+    private Vector3[] points = new Vector3[2];
 
     public float _moveSpeed = 5f;
     public Vector2 boxSize = new Vector2(1f, 2f);
@@ -16,12 +17,14 @@ public class Movement : MonoBehaviour
     public LayerMask groundLayer;
     public float _rotationSpeed = 10f;
     public Camera MainCam;
+    public GameObject tongue;
 
     private Vector3 _direction; // 1 if facing right, -1 if facing left
 
     void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
+        transform.GetComponent<DistanceJoint2D>().enabled=false;
     }
 
     void Update()
@@ -47,29 +50,56 @@ public class Movement : MonoBehaviour
         {
             Physics2D.gravity = new Vector2(0, 0);
         }
+        if(isExtending)
+        {
+            tongue.SetActive(true);
+            pointIn=MainCam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, MainCam.nearClipPlane));
+            distance = Mathf.Sqrt(Mathf.Pow(pointIn[0]-transform.position.x,2)+Mathf.Pow(pointIn[1]-transform.position.y,2));
+            tongue.transform.position+= new Vector3((pointIn[0]-transform.position.x)/distance/5,(pointIn[1]-transform.position.y)/distance/5,0);
+            points[0] = new Vector3(transform.position.x, transform.position.y, -0.7f);
+            points[1] = new Vector3(tongue.transform.position.x, tongue.transform.position.y, -0.7f);
+            tongue.transform.GetComponent<LineRenderer>().SetPositions(points);
+            if(isFound)
+            {
+                tonguePosX=tongue.transform.position.x;
+                tonguePosY=tongue.transform.position.y;
+                isSwinging=true;
+                isExtending=false;
+            }
+        }
         if(Input.GetMouseButton(0))
         {
             if(!isSwinging)
             {
-                point=MainCam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, MainCam.nearClipPlane));
-                mousePosX=point[0];
-                mousePosY=point[1];
-                transform.GetComponent<DistanceJoint2D>().enabled=true;
-                transform.GetComponent<DistanceJoint2D>().connectedAnchor=new Vector2(mousePosX,mousePosY);
-                isSwinging=true;
+                isExtending=true;
             }
             else
             {
-                transform.GetComponent<DistanceJoint2D>().connectedAnchor=new Vector2(mousePosX,mousePosY);
+                transform.GetComponent<DistanceJoint2D>().enabled=true;
+                transform.GetComponent<DistanceJoint2D>().connectedAnchor=new Vector2(tonguePosX,tonguePosY);
+
+                
+
+                points[0] = new Vector3(transform.position.x, transform.position.y, -0.7f);
+                points[1] = new Vector3(tongue.transform.position.x, tongue.transform.position.y, -0.7f);
+                Debug.Log(tongue.transform.position);
+                tongue.transform.GetComponent<LineRenderer>().SetPositions(points);
             }
         }
         if(Input.GetMouseButtonUp(0))
         {
             isSwinging=false;
+            isExtending=false;
             transform.GetComponent<DistanceJoint2D>().enabled=false;
+            tongue.SetActive(false);
+            isFound=false;
+            tongue.transform.position= new Vector2(transform.position.x,transform.position.y);
         }
     }
-
+    public void foundPath()
+    {
+        isFound=true;
+    }
     private bool IsGrounded()
     {
         // Check if the player is grounded
