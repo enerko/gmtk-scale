@@ -18,7 +18,10 @@ public class ScaleWheel : MonoBehaviour
         {
             transform.GetChild(0).gameObject.SetActive(true);
         }
-        transform.GetChild(scaleAmount).gameObject.SetActive(true);
+        if(scaleAmount<=6)
+        {
+            transform.GetChild(scaleAmount).gameObject.SetActive(true);
+        }
     }
     void Update()
     {
