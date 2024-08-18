@@ -10,7 +10,7 @@ public class ScaleWheel : MonoBehaviour
     public void increaseScales()
     {
         scaleAmount+=1;
-        if(scaleAmount>1)
+        if(scaleAmount>1 &&scaleAmount<=6)
         {
             transform.GetChild(scaleAmount-1).gameObject.SetActive(false);
         }
