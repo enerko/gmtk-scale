@@ -27,14 +27,14 @@ public class EnemyMovement : MonoBehaviour
         // Check if the player is in the detection range
         if (Vector2.Distance(transform.position, player.position) <= detectionRadius)
         {
+            // If the player is in range, change color to red
+            spriteRenderer.color = detectedColor;
+
             if (!isPlayerInRange)
             {
                 // Save the position where the enemy starts chasing the player
                 initialChasePosition = transform.position;
                 isPlayerInRange = true;
-
-                // Change color to indicate detection
-                spriteRenderer.color = detectedColor;
             }
 
             // Move towards the player
