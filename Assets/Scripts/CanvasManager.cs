@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class CanvasManager : MonoBehaviour
 {
-    public GameObject staminaBar, staminaParent;
+    public GameObject staminaBar, staminaParent, player;
     public Image image, image2;
     public float fadeDelay=2f;
     [SerializeField] private
@@ -44,17 +44,8 @@ public class CanvasManager : MonoBehaviour
                 image2.color = new Color(255, 255, 255, fades/4);
             }
         }
-
         //temporary stamina count by left shift, eventually Carmy tongue will trigger this
-        if (Input.GetKey(KeyCode.LeftShift) &&!isStamLost)
-        {
-            stamVal-=1;
-            isActivated=true;
-        }
-        else
-        {
-            stamVal+=0.5f;
-        }
+        stamVal+=0.25f;
         if(stamVal<-470)
         {
             isStamLost=true;
@@ -67,16 +58,28 @@ public class CanvasManager : MonoBehaviour
         staminaBar.GetComponent<RectTransform>().sizeDelta=new Vector2(stamVal,0);
         if(isStamLost)
         {
+            player.GetComponent<Movement>().OverHeat();
             time+=Time.deltaTime;
             t=-Mathf.Cos(5*time)/4+0.75f;
             image.color = new Color(255, 0, 0, t);
             if(stamVal>-1)
             {
                 isStamLost=false;
+                player.GetComponent<Movement>().CoolDown();
                 image.color = new Color(255, 255, 255, 1f);
             }
             
         }
         
+    }
+    public void StaminaDeplete()
+    {
+        stamVal-=0.5f;
+        isActivated=true;
+    }
+    public void StaminaIncrease()
+    {
+        stamVal-=0.25f;
+        isActivated=true;
     }
 }
