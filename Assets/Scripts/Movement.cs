@@ -5,7 +5,7 @@ public class Movement : MonoBehaviour
     private Rigidbody2D _rb;
     private float _horizontal;
     private float _vertical;
-    private float gravVal, disVal1, disVal2, mousePosX,mousePosY;
+    private float mousePosX,mousePosY;
     private bool isSwinging=false;
     private Vector3 point = new Vector3();
 
@@ -41,42 +41,32 @@ public class Movement : MonoBehaviour
         }
         if(!IsGrounded())
         {
-            gravVal-=0.1f;
-            transform.position+=new Vector3(0,-16*Mathf.Pow(gravVal*Time.deltaTime,2),0);
+            Physics2D.gravity = new Vector2(0, -9.8f);
         }
         else
         {
-            gravVal=0;
+            Physics2D.gravity = new Vector2(0, 0);
         }
         if(Input.GetMouseButton(0))
         {
-            // Swing((MousePos.x,MousePos.y));
             if(!isSwinging)
             {
-                point=MainCam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.x, MainCam.nearClipPlane));
-                Debug.Log(point);
+                point=MainCam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, MainCam.nearClipPlane));
                 mousePosX=point[0];
                 mousePosY=point[1];
-                disVal1=Mathf.Sqrt(Mathf.Pow(mousePosX-transform.position[0],2f)+Mathf.Pow(mousePosY-transform.position[1],2f));
+                transform.GetComponent<DistanceJoint2D>().enabled=true;
+                transform.GetComponent<DistanceJoint2D>().connectedAnchor=new Vector2(mousePosX,mousePosY);
                 isSwinging=true;
             }
             else
             {
-                disVal2=Mathf.Sqrt(Mathf.Pow(mousePosX-transform.position[0],2f)+Mathf.Pow(mousePosY-transform.position[1],2f));
-                if(disVal2>disVal1)
-                {
-                    if(gravVal>10f)
-                    {
-                        gravVal=10f;
-                    }
-                    Debug.Log("OUT OF RANGE");
-                    _rb.velocity= new Vector2(((disVal2-disVal1)/disVal2)*(mousePosX-transform.position.x)*300*Time.deltaTime,((disVal2-disVal1)/disVal2)*(mousePosY-transform.position.y)*300*Time.deltaTime);
-                }
+                transform.GetComponent<DistanceJoint2D>().connectedAnchor=new Vector2(mousePosX,mousePosY);
             }
         }
         if(Input.GetMouseButtonUp(0))
         {
             isSwinging=false;
+            transform.GetComponent<DistanceJoint2D>().enabled=false;
         }
     }
 
