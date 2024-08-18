@@ -5,6 +5,9 @@ public class Movement : MonoBehaviour
     private Rigidbody2D _rb;
     private float _horizontal;
     private float _vertical;
+    private float gravVal, disVal1, disVal2, mousePosX,mousePosY;
+    private bool isSwinging=false;
+    private Vector3 point = new Vector3();
 
     public float _moveSpeed = 5f;
     public Vector2 boxSize = new Vector2(1f, 2f);
@@ -12,6 +15,7 @@ public class Movement : MonoBehaviour
     public float wallCastDistance = 0.1f;
     public LayerMask groundLayer;
     public float _rotationSpeed = 10f;
+    public Camera MainCam;
 
     private Vector3 _direction; // 1 if facing right, -1 if facing left
 
@@ -34,6 +38,45 @@ public class Movement : MonoBehaviour
         if (!IsNextToAWall())
         {
             HandleMovement();
+        }
+        if(!IsGrounded())
+        {
+            gravVal-=0.1f;
+            transform.position+=new Vector3(0,-16*Mathf.Pow(gravVal*Time.deltaTime,2),0);
+        }
+        else
+        {
+            gravVal=0;
+        }
+        if(Input.GetMouseButton(0))
+        {
+            // Swing((MousePos.x,MousePos.y));
+            if(!isSwinging)
+            {
+                point=MainCam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.x, MainCam.nearClipPlane));
+                Debug.Log(point);
+                mousePosX=point[0];
+                mousePosY=point[1];
+                disVal1=Mathf.Sqrt(Mathf.Pow(mousePosX-transform.position[0],2f)+Mathf.Pow(mousePosY-transform.position[1],2f));
+                isSwinging=true;
+            }
+            else
+            {
+                disVal2=Mathf.Sqrt(Mathf.Pow(mousePosX-transform.position[0],2f)+Mathf.Pow(mousePosY-transform.position[1],2f));
+                if(disVal2>disVal1)
+                {
+                    if(gravVal>10f)
+                    {
+                        gravVal=10f;
+                    }
+                    Debug.Log("OUT OF RANGE");
+                    _rb.velocity= new Vector2(((disVal2-disVal1)/disVal2)*(mousePosX-transform.position.x)*300*Time.deltaTime,((disVal2-disVal1)/disVal2)*(mousePosY-transform.position.y)*300*Time.deltaTime);
+                }
+            }
+        }
+        if(Input.GetMouseButtonUp(0))
+        {
+            isSwinging=false;
         }
     }
 
