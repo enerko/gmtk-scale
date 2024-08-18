@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Prefab/ChangeSpawnPoint.prefab.meta
 guid: 4074fe16dcaf0c54baebf9ccfacd3cb1
 PrefabImporter:
+=======
+guid: 07e047b3e81c4784da8d4612aa5e2dd8
+DefaultImporter:
+>>>>>>> enerko-animation:Assets/Scenes/Anim.unity.meta
   externalObjects: {}
   userData: 
   assetBundleName: 
