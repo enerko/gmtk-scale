@@ -10,11 +10,16 @@ public class EnemyMovement : MonoBehaviour
     private Transform player;
     private Vector2 initialChasePosition;
     private bool isPlayerInRange = false;
+    private SpriteRenderer spriteRenderer;
+    private Color originalColor;
+    private Color detectedColor = Color.red;
 
     // Find player object
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        originalColor = spriteRenderer.color;
     }
 
     void Update()
@@ -27,6 +32,9 @@ public class EnemyMovement : MonoBehaviour
                 // Save the position where the enemy starts chasing the player
                 initialChasePosition = transform.position;
                 isPlayerInRange = true;
+
+                // Change color to indicate detection
+                spriteRenderer.color = detectedColor;
             }
 
             // Move towards the player
@@ -36,6 +44,8 @@ public class EnemyMovement : MonoBehaviour
         {
             if (isPlayerInRange)
             {
+                // Change color back to the original color
+                spriteRenderer.color = originalColor;
                 // Return to the position where the enemy started chasing the player
                 transform.position = Vector2.MoveTowards(transform.position, initialChasePosition, speed * Time.deltaTime);
 
@@ -43,6 +53,7 @@ public class EnemyMovement : MonoBehaviour
                 if (Vector2.Distance(transform.position, initialChasePosition) < 0.1f)
                 {
                     isPlayerInRange = false;
+ 
                 }
             }
             else
