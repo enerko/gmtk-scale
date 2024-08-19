@@ -21,6 +21,7 @@ public class SwingScript : MonoBehaviour
 
     void Start()
     {
+        tongue.transform.position= new Vector2(transform.position.x,transform.position.y);
         _rb = GetComponent<Rigidbody2D>();
         transform.GetComponent<DistanceJoint2D>().enabled=false;
     }
