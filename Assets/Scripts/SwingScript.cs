@@ -28,8 +28,6 @@ public class SwingScript : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(IsGrounded());
-        Debug.Log(IsRoofed());
         if(!IsGrounded())
         {
             Physics2D.gravity = new Vector2(0, -9.8f);
