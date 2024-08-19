@@ -8,6 +8,7 @@ TagManager:
   - Enemy
   - ChangeSpawnPoint
   - Path
+  - Exit
   layers:
   - Default
   - TransparentFX
