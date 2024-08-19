@@ -17,6 +17,7 @@ public class SwingScript : MonoBehaviour
     public Canvas canvas;
     public GameObject pathUn;
     public GameObject head,body;
+    public bool safe=false;
 
     private Vector3 _direction; // 1 if facing right, -1 if facing left
 

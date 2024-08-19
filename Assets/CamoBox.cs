@@ -23,11 +23,11 @@ public class CamoBox : MonoBehaviour
         {
             if(ScaleWheel.GetComponent<ScaleWheel>().currantColor==color)
             {
-                Debug.Log("CAMO");
+                other.GetComponent<SwingScript>().safe=true;
             }
             else
             {
-                Debug.Log("NO CAMO");
+                other.GetComponent<SwingScript>().safe=false;
             }
         }
     }
@@ -35,7 +35,7 @@ public class CamoBox : MonoBehaviour
     {
         if(other.tag=="Player")
         {
-            Debug.Log("NO CAMO");
+            other.GetComponent<SwingScript>().safe=false;
         }
     }
 }

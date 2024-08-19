@@ -13,6 +13,7 @@ public class EnemyMovement : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private Color originalColor;
     private Color detectedColor = Color.red;
+    private bool safe=false;
 
     // Find player object
     void Start()
@@ -24,8 +25,9 @@ public class EnemyMovement : MonoBehaviour
 
     void Update()
     {
-        // Check if the player is in the detection range
-        if (Vector2.Distance(transform.position, player.position) <= detectionRadius)
+        safe=player.GetComponent<SwingScript>().safe;
+        // Check if the player is in the detection range and if they are not safe
+        if (Vector2.Distance(transform.position, player.position) <= detectionRadius && !safe)
         {
             // If the player is in range, change color to red
             spriteRenderer.color = detectedColor;
