@@ -1,43 +1,48 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
     private AudioSource audioSource;
-    private AudioClip mainMenu;
-    private AudioClip cave;
-    private AudioClip forest;
-    private AudioClip poacherWarehouse;
+    //[SerializeField] private AudioClip mainMenu;
+    [SerializeField] private AudioClip cave;
+    [SerializeField] private AudioClip forest;
+    //[SerializeField] private AudioClip poacherWarehouse;
 
-    void Start()
+    void Awake()
     {
-        // May be changed to PlayMainMenuMusic later
-        PlayCaveMusic();
+        audioSource = GetComponent<AudioSource>();
+
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
     }
 
-    // According to the scene change, change music with StageManager later
-    public void PlayMainMenuMusic()
+    public void PlayMusicForScene(string sceneName)
     {
-        audioSource.clip = mainMenu;
-        audioSource.Play();
-    }
+        AudioClip clip = null;
 
-    public void PlayCaveMusic()
-    {
-        audioSource.clip = cave;
-        audioSource.Play();
-    }
+        switch (sceneName)
+        {
+            /*case "MainMenu":
+                clip = mainMenu;
+                break;*/
+            case "Cave":
+                clip = cave;
+                break;
+            case "Forest":
+                clip = forest;
+                break;
+            /*case "PoacherWarehouse":
+                clip = poacherWarehouse;
+                break;*/
+                // Add more scenes if needed
+        }
 
-    public void PlayForestMusic()
-    {
-        audioSource.clip = forest;
-        audioSource.Play();
-    }
-
-    public void PlayPoacherWarehouseMusic()
-    {
-        audioSource.clip = poacherWarehouse;
-        audioSource.Play();
+        if (clip != null)
+        {
+            audioSource.clip = clip;
+            audioSource.Play();
+        }
     }
 }
