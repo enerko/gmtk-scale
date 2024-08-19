@@ -22,6 +22,7 @@ public class SwingScript : MonoBehaviour
     void Start()
     {
         tongue.transform.position= new Vector2(transform.position.x,transform.position.y);
+        tongue.SetActive(false);
         _rb = GetComponent<Rigidbody2D>();
         transform.GetComponent<DistanceJoint2D>().enabled=false;
     }
@@ -115,8 +116,8 @@ public class SwingScript : MonoBehaviour
             points[1] = new Vector3(tongue.transform.position.x, tongue.transform.position.y, -0.7f);
             tongue.transform.GetComponent<LineRenderer>().SetPositions(points);
             distance2 = Mathf.Sqrt(Mathf.Pow(transform.position.x-tongue.transform.position.x,2)+Mathf.Pow(transform.position.y-tongue.transform.position.y,2));
-            tongue.transform.position+= new Vector3((transform.position.x-tongue.transform.position.x)/distance/5,(transform.position.y-tongue.transform.position.y)/distance/5,0);
-            if(Mathf.Abs(transform.position.x-tongue.transform.position.x)<0.1f&&Mathf.Abs(transform.position.y-tongue.transform.position.y)<0.1f)
+            tongue.transform.position+= new Vector3((transform.position.x-tongue.transform.position.x)/distance,(transform.position.y-tongue.transform.position.y)/distance,0);
+            if(Mathf.Abs(transform.position.x-tongue.transform.position.x)<2f&&Mathf.Abs(transform.position.y-tongue.transform.position.y)<0.1f)
             {
                 isMissed=false;
                 isRetracting=false;
