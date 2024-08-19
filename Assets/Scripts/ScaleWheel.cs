@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class ScaleWheel : MonoBehaviour
 {
+    public int currantColor=1;
     [SerializeField] private
     int scaleAmount=-1;
-    int currantColor=1;
     bool delay=false;
     // Start is called before the first frame update
     public void increaseScales()
@@ -20,6 +20,10 @@ public class ScaleWheel : MonoBehaviour
         {
             transform.GetChild(scaleAmount).gameObject.SetActive(true);
         }
+        if(scaleAmount==0)
+        {
+            transform.GetChild(7).gameObject.SetActive(true);
+        }
     }
     void Start()
     {
@@ -30,43 +34,36 @@ public class ScaleWheel : MonoBehaviour
         //blue
         if(!delay)
         {
-            delay=true;
         if(Input.GetKeyDown(KeyCode.Alpha1) &&scaleAmount>=0)
         {
-            currantColor=1;
+            delay=true;
             StartCoroutine(changeBlue());
-            transform.GetChild(7).gameObject.SetActive(true);
         }
         //red
         if(Input.GetKeyDown(KeyCode.Alpha2)&&scaleAmount>=1)
         {
-            currantColor=2;
+            delay=true;
             StartCoroutine(changeRed());
-            transform.GetChild(8).gameObject.SetActive(true);
         }
         if(Input.GetKeyDown(KeyCode.Alpha3)&&scaleAmount>=2)
         {
-            currantColor=3;
+            delay=true;
             StartCoroutine(changeGreen());
-            transform.GetChild(9).gameObject.SetActive(true);
         }
         if(Input.GetKeyDown(KeyCode.Alpha4)&&scaleAmount>=3)
         {
-            currantColor=4;
+            delay=true;
             StartCoroutine(changeBrown());
-            transform.GetChild(10).gameObject.SetActive(true);
         }
         if(Input.GetKeyDown(KeyCode.Alpha5)&&scaleAmount>=4)
         {
-            currantColor=5;
+            delay=true;
             StartCoroutine(changePurple());
-            transform.GetChild(11).gameObject.SetActive(true);
         }
         if(Input.GetKeyDown(KeyCode.Alpha6)&&scaleAmount>=5)
         {
-            currantColor=6;
+            delay=true;
             StartCoroutine(changeYellow());
-            transform.GetChild(12).gameObject.SetActive(true);
         }
         }
         if(Input.GetKeyDown(KeyCode.E))
@@ -76,6 +73,7 @@ public class ScaleWheel : MonoBehaviour
     }
     private void EmptyTail()
     {
+        currantColor=0;
         transform.GetChild(7).gameObject.SetActive(false);
         transform.GetChild(8).gameObject.SetActive(false);
         transform.GetChild(9).gameObject.SetActive(false);
@@ -88,6 +86,7 @@ public class ScaleWheel : MonoBehaviour
         EmptyTail();
         transform.GetChild(6).gameObject.SetActive(true);
         yield return new WaitForSeconds(3);
+        currantColor=1;
         transform.GetChild(6).gameObject.SetActive(false);
         transform.GetChild(7).gameObject.SetActive(true);
         delay=false;
@@ -97,6 +96,7 @@ public class ScaleWheel : MonoBehaviour
         EmptyTail();
         transform.GetChild(6).gameObject.SetActive(true);
         yield return new WaitForSeconds(3);
+        currantColor=2;
         transform.GetChild(6).gameObject.SetActive(false);
         transform.GetChild(8).gameObject.SetActive(true);
         delay=false;
@@ -106,6 +106,7 @@ public class ScaleWheel : MonoBehaviour
         EmptyTail();
         transform.GetChild(6).gameObject.SetActive(true);
         yield return new WaitForSeconds(3);
+        currantColor=3;
         transform.GetChild(6).gameObject.SetActive(false);
         transform.GetChild(9).gameObject.SetActive(true);
         delay=false;
@@ -115,6 +116,7 @@ public class ScaleWheel : MonoBehaviour
         EmptyTail();
         transform.GetChild(6).gameObject.SetActive(true);
         yield return new WaitForSeconds(3);
+        currantColor=4;
         transform.GetChild(6).gameObject.SetActive(false);
         transform.GetChild(10).gameObject.SetActive(true);
         delay=false;
@@ -124,6 +126,7 @@ public class ScaleWheel : MonoBehaviour
         EmptyTail();
         transform.GetChild(6).gameObject.SetActive(true);
         yield return new WaitForSeconds(3);
+        currantColor=5;
         transform.GetChild(6).gameObject.SetActive(false);
         transform.GetChild(11).gameObject.SetActive(true);
         delay=false;
@@ -133,6 +136,7 @@ public class ScaleWheel : MonoBehaviour
         EmptyTail();
         transform.GetChild(6).gameObject.SetActive(true);
         yield return new WaitForSeconds(3);
+        currantColor=6;
         transform.GetChild(6).gameObject.SetActive(false);
         transform.GetChild(12).gameObject.SetActive(true);
         delay=false;
