@@ -3,7 +3,7 @@ using UnityEngine;
 public class LegMover : MonoBehaviour
 {
     [SerializeField] private Transform _limbSolverTarget;
-    private float _moveDistance = 1f;
+    [SerializeField] private float _moveDistance = 0.1f;
     [SerializeField] private LayerMask _groundLayer;
 
     // Start is called before the first frame update
@@ -15,7 +15,7 @@ public class LegMover : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        CheckGround();
+        // CheckGround();
 
         if (Vector2.Distance(_limbSolverTarget.position, transform.position) > _moveDistance)
         {
