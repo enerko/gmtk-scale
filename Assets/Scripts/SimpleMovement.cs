@@ -8,11 +8,14 @@ public class SimpleMovement : MonoBehaviour
     private float _horizontal;
     private float _vertical;
     private float _moveSpeed = 5f;
+    private StageManager stageManager;
 
     // Start is called before the first frame update
     void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
+        // Find the StageManager instance in the scene
+        stageManager = FindObjectOfType<StageManager>();
     }
 
     // Update is called once per frame
@@ -28,4 +31,11 @@ public class SimpleMovement : MonoBehaviour
         _rb.velocity = new Vector2(_horizontal * _moveSpeed, _vertical * _moveSpeed);
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Exit") && stageManager != null)
+        {
+            stageManager.LoadNextScene();
+        }
+    }
 }
