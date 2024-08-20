@@ -394,6 +394,11 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3748330346716584170, guid: 317a4c4c83cb13444988da7c05a594ba, type: 3}
   m_PrefabInstance: {fileID: 7365219473340353215}
   m_PrefabAsset: {fileID: 0}
+--- !u!212 &193697915 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 2495035267864245776, guid: 317a4c4c83cb13444988da7c05a594ba, type: 3}
+  m_PrefabInstance: {fileID: 7365219473340353215}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &197703090 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4574517020498683588, guid: 96d358b128871e8428e28901123f0962, type: 3}
@@ -9906,6 +9911,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4226514986005986706, guid: 3ac59a423e56a7f4aadc531902d82bbd, type: 3}
+      propertyPath: _spr
+      value: 
+      objectReference: {fileID: 193697915}
+    - target: {fileID: 4226514986005986706, guid: 3ac59a423e56a7f4aadc531902d82bbd, type: 3}
       propertyPath: _player
       value: 
       objectReference: {fileID: 1369370103}
@@ -9913,6 +9922,10 @@ PrefabInstance:
       propertyPath: _animPlayer
       value: 
       objectReference: {fileID: 193697913}
+    - target: {fileID: 4226514986005986706, guid: 3ac59a423e56a7f4aadc531902d82bbd, type: 3}
+      propertyPath: _sprites.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4226514986005986706, guid: 3ac59a423e56a7f4aadc531902d82bbd, type: 3}
       propertyPath: _sprites.Array.data[0]
       value: 

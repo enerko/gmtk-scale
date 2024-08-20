@@ -14,6 +14,7 @@ public class EnemyMovement : MonoBehaviour
     private Color originalColor;
     private Color detectedColor = Color.red;
     private bool safe=false;
+    [SerializeField] private AudioClip _audio;
 
     // Find player object
     void Start()
@@ -31,6 +32,9 @@ public class EnemyMovement : MonoBehaviour
         {
             // If the player is in range, change color to red
             spriteRenderer.color = detectedColor;
+            SFXManager.AdjustVolume(0.1f);
+            SFXManager.PlayClip(_audio);
+            SFXManager.AdjustVolume(0.5f);
 
             if (!isPlayerInRange)
             {
