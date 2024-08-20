@@ -8,6 +8,7 @@ public class Globals : MonoBehaviour
 
     public static Globals Instance;
     [SerializeField] private AudioClip _levelMusic;
+    [SerializeField] private AudioClip _introMusic;
     private static int _currLevel = 0;
     private AudioSource _audioSource;
 
@@ -28,7 +29,34 @@ public class Globals : MonoBehaviour
 
     private void Start()
     {
-        PlayMusic(_levelMusic);
+        if(_introMusic != null)
+        {
+            PlayMusicWithIntro(_introMusic, _levelMusic);
+        }
+        else
+        {
+            PlayMusic(_levelMusic);
+        }
+        
+    }
+
+    public static void PlayMusicWithIntro(AudioClip introClip, AudioClip mainLoopClip)
+    {
+        if (Instance != null && Instance._audioSource != null)
+        {
+            Instance.StartCoroutine(Instance.PlayIntroAndLoop(introClip, mainLoopClip));
+        }
+    }
+
+    private IEnumerator PlayIntroAndLoop(AudioClip introClip, AudioClip mainLoopClip)
+    {
+        _audioSource.clip = introClip;
+        _audioSource.Play();
+        yield return new WaitForSeconds(introClip.length);
+
+        _audioSource.clip = mainLoopClip;
+        _audioSource.loop = true;
+        _audioSource.Play();
     }
 
     public static void LoadNextLevel()
