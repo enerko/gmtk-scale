@@ -12,6 +12,8 @@ public class SimpleMovement : MonoBehaviour
     private float _rotationSpeed = 10f;
 
     public AudioClip walkAudio;
+    private Collider2D _collider;
+    private bool _isTouchingGround;
 
     [SerializeField] private Vector2 _boxSize = new Vector2(1f, 0.34f);
     [SerializeField] private Vector2 _offset = new Vector2(-0.85f, 0.43f);
@@ -27,6 +29,7 @@ public class SimpleMovement : MonoBehaviour
     void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
+        _collider = GetComponent<Collider2D>();
     }
 
     // Update is called once per frame
@@ -39,6 +42,7 @@ public class SimpleMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        // If not touching corner layer, allow only horizontal or only vertical movement
         if (!IsTouching(_cornerLayer))
         {
             CheckDirection();
@@ -46,17 +50,13 @@ public class SimpleMovement : MonoBehaviour
             {
                 Flip();
             }
-            
         }
-
-        if (!IsTouching(_groundLayer))
+        else if (!_isTouchingGround)
         {
-            StartCoroutine(RotateUntilTouchingGround());
+            // Sometimes swinging causes player to flip 
+            RotatePlayer();
         }
-
         _rb.velocity = new Vector2(_horizontal * _moveSpeed, _vertical * _moveSpeed);
-        
-        Debug.Log(walkAudio);
 
     }
     private IEnumerator RotateUntilTouchingGround()
@@ -64,11 +64,30 @@ public class SimpleMovement : MonoBehaviour
         while (!IsTouching(_groundLayer))
         {
             // Rotate the object
+            _collider.enabled = false;
             transform.Rotate(0, 0, _rotationSpeed * Time.deltaTime);
+            Debug.Log("rotating");
 
             // Yield control back to the game loop
             yield return null;
         }
+        _collider.enabled = true;
+    }
+
+    private void RotatePlayer()
+    {
+        float rotationAmount = 0;
+
+        if (_horizontal != 0)
+        {
+            rotationAmount = -_horizontal * _rotationSpeed * Time.deltaTime;
+        }
+        else if (_vertical != 0)
+        {
+            rotationAmount = _vertical * _rotationSpeed * Time.deltaTime;
+        }
+
+        transform.Rotate(0, 0, rotationAmount);
     }
 
     private void CheckDirection()
@@ -93,16 +112,6 @@ public class SimpleMovement : MonoBehaviour
         }
     }
 
-    private bool IsBackTouching(LayerMask layer)
-    {
-        // Calculate the rotated offset
-        Vector3 rotatedOffset = transform.rotation * _offset;
-
-        // Check if the player is grounded
-        RaycastHit2D hit = Physics2D.BoxCast(transform.position + rotatedOffset, _boxSize, transform.eulerAngles.z, transform.up, _topCastDistance, layer);
-        return hit.collider != null;
-    }
-
     private void Flip()
     {
         Vector2 localScale = transform.localScale;
@@ -117,6 +126,18 @@ public class SimpleMovement : MonoBehaviour
         transform.localScale = localScale;
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "Path")
+        {
+            _isTouchingGround = true;
+        }
+        else
+        {
+            _isTouchingGround = false;
+        }
+    }
+
     private bool IsTouching(LayerMask layer)
     {
         // Calculate the rotated offset
@@ -125,23 +146,5 @@ public class SimpleMovement : MonoBehaviour
         // Check if the player is grounded
         RaycastHit2D hit = Physics2D.BoxCast(transform.position + rotatedOffset, _boxSize, transform.eulerAngles.z, -transform.up, _groundCastDistance, layer);
         return hit.collider != null;
-    }
-
-
-
-    private void OnDrawGizmos()
-    {
-        // Calculate the rotated offset
-        Vector3 rotatedOffset = transform.rotation * _offset;
-
-        // Ground detection box
-        Gizmos.color = Color.blue;
-        Vector3 groundBoxCenter = transform.position + rotatedOffset - transform.up * (_groundCastDistance / 2);
-        Gizmos.DrawWireCube(groundBoxCenter, _boxSize);
-
-        // Ground detection box
-        Gizmos.color = Color.blue;
-        Vector3 topBox = transform.position + rotatedOffset + transform.up * (_topCastDistance / 2);
-        Gizmos.DrawWireCube(topBox, _boxSize);
     }
 }
