@@ -39,6 +39,13 @@ public class SimpleMovement : MonoBehaviour
         // Get horizontal and vertical input
         _horizontal = Input.GetAxisRaw("Horizontal");
         _vertical = Input.GetAxisRaw("Vertical");
+
+        // Reload level
+        if (Input.GetKey(KeyCode.R))
+        {
+            Globals.PauseMusic();
+            Globals.ReloadLevel();
+        }
     }
 
     private void FixedUpdate()

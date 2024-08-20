@@ -9,6 +9,7 @@ public class Globals : MonoBehaviour
     public static Globals Instance;
     [SerializeField] private AudioClip _levelMusic;
     private static int _currLevel = 0;
+    private AudioSource _audioSource;
 
     private void Awake()
     {
@@ -17,6 +18,7 @@ public class Globals : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            _audioSource = GetComponent<AudioSource>();
         }
         else
         {
@@ -31,16 +33,33 @@ public class Globals : MonoBehaviour
 
     public static void LoadNextLevel()
     {
-        int nextLevel = _currLevel + 1;
-        SceneManager.LoadScene("Level " +  nextLevel);
-        Debug.Log("loading" + "Level " + nextLevel);
+        _currLevel += 1;
+        SceneManager.LoadScene("Level " +  _currLevel);
+        Debug.Log("loading" + "Level " + _currLevel);
+    }
+
+    public static void ReloadLevel()
+    {
+        SceneManager.LoadScene("Level " + _currLevel);
     }
 
     public static void PlayMusic(AudioClip music)
     {
-        Instance.GetComponent<AudioSource>().clip = music;
-        Instance.GetComponent<AudioSource>().Play();
-        Instance.GetComponent<AudioSource>().loop = true;   
+        if (Instance._audioSource != null)
+        {
+            Instance._audioSource.clip = music;
+            Instance._audioSource.Play();
+            Instance._audioSource.loop = true;
+        }
+    }
+
+    public static void PauseMusic()
+    {
+        if (Instance._audioSource != null)
+        {
+            Instance._audioSource.Stop();
+            Instance._audioSource.clip = null;
+        }
     }
 
     public static void PlaySFX(AudioClip sfx)
