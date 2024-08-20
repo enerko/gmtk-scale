@@ -12,9 +12,9 @@ public class SimpleMovement : MonoBehaviour
 
     public AudioClip walkAudio;
 
-    [SerializeField] private Vector2 _boxSize = new Vector2(1f, 2f);
-    [SerializeField] private Vector2 _offset = new Vector2(1f, 1f);
-    [SerializeField] private float _groundCastDistance = 0.1f;
+    [SerializeField] private Vector2 _boxSize = new Vector2(1f, 0.34f);
+    [SerializeField] private Vector2 _offset = new Vector2(-0.85f, 0.43f);
+    [SerializeField] private float _groundCastDistance = 1f;
     [SerializeField] private LayerMask _groundLayer;
     [SerializeField] private LayerMask _cornerLayer;
     [SerializeField] private float _downwardForce;

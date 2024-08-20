@@ -42,7 +42,9 @@ public class SnakeScript : MonoBehaviour
     {
         if(other.tag=="Player")
         {
+            SFXManager.AdjustVolume(0.1f);
             SFXManager.PlayClip(_hissAudio);
+            
             isReturning=false;
             distance=Mathf.Sqrt(Mathf.Pow(head.transform.position.x-other.transform.position.x, 2f)+(Mathf.Pow(head.transform.position.y-other.transform.position.y, 2f)))*SnakeSpeed;
             if(distance<0.1f)

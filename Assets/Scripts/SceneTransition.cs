@@ -8,7 +8,6 @@ public class SceneTransition : MonoBehaviour
     {
         if(collision.gameObject.tag == "Player")
         {
-            Destroy(collision.gameObject);
             Globals.LoadNextLevel();
         }
     }
