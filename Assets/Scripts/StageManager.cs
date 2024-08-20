@@ -34,6 +34,7 @@ public class StageManager : MonoBehaviour
         }*/
     }
 
+
     private void PlayMusicForCurrentScene()
     {
         if (audioManager != null)
@@ -42,4 +43,5 @@ public class StageManager : MonoBehaviour
             audioManager.PlayMusicForScene(sceneName);
         }
     }
+
 }
