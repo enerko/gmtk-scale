@@ -58,6 +58,10 @@ public class SimpleMovement : MonoBehaviour
             // If trigger is not touching ground, then rotate player
             StartCoroutine(RotateUntilTouchingGround());
         }
+        if (_isTouchingGround)
+        {
+            SFXManager.PlayClip(walkAudio);
+        }
         if (IsGroundAhead())
         {
             _rb.velocity += (Vector2)(-transform.up * _downwardForce);
@@ -84,7 +88,7 @@ public class SimpleMovement : MonoBehaviour
     {
         RaycastHit2D hit = Physics2D.Raycast(transform.position + _offset, -transform.up, _checkDistance, _groundLayer);
 
-        Debug.DrawRay(transform.position + _offset, -transform.up * _checkDistance, Color.red);
+        // Debug.DrawRay(transform.position + _offset, -transform.up * _checkDistance, Color.red);
 
         return hit.collider != null;
     }

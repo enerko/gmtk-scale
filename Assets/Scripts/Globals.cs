@@ -40,6 +40,7 @@ public class Globals : MonoBehaviour
     {
         Instance.GetComponent<AudioSource>().clip = music;
         Instance.GetComponent<AudioSource>().Play();
+        Instance.GetComponent<AudioSource>().loop = true;   
     }
 
     public static void PlaySFX(AudioClip sfx)
