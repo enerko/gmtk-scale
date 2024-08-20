@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class SnakeScript : MonoBehaviour
 {
-    public GameObject head;
+    public GameObject head,point1,point2;
     public float SnakeSpeed=10f;
     [SerializeField] private
     float headPosX;
     float headPosY;
     float distance;
     bool isReturning =false;
+    private Vector3[] points = new Vector3[2];
     // Start is called before the first frame update
     void Start()
     {
@@ -31,6 +32,9 @@ public class SnakeScript : MonoBehaviour
             }
             head.transform.position+=new Vector3((headPosX-head.transform.position.x)/distance,(headPosY-head.transform.position.y)/distance,0);
         }
+        points[0] = new Vector3(transform.TransformPoint(point1.transform.position).x, transform.TransformPoint(point1.transform.position).y, -1.005f);
+        points[1] = new Vector3(transform.TransformPoint(point2.transform.position).x, transform.TransformPoint(point2.transform.position).y, -1.005f);
+        transform.GetComponent<LineRenderer>().SetPositions(points);
     }
     void OnTriggerStay2D(Collider2D other)
     {
@@ -50,4 +54,5 @@ public class SnakeScript : MonoBehaviour
     {
         isReturning=true;
     }
+    
 }
