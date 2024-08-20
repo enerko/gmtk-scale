@@ -10,7 +10,7 @@ public class SimpleMovement : MonoBehaviour
     private float _moveSpeed = 5f;
     private int _direction = -1;
 
-
+    public AudioClip walkAudio;
 
     [SerializeField] private Vector2 _boxSize = new Vector2(1f, 2f);
     [SerializeField] private Vector2 _offset = new Vector2(1f, 1f);
@@ -51,8 +51,11 @@ public class SimpleMovement : MonoBehaviour
         if(!IsTouching(_groundLayer))
         {
             _rb.velocity += (Vector2)(-transform.up) * _downwardForce;
+            SFXManager.PlayClip(walkAudio);
         }
         _rb.velocity = new Vector2(_horizontal * _moveSpeed, _vertical * _moveSpeed);
+        
+        Debug.Log(walkAudio);
 
     }
 
@@ -83,8 +86,6 @@ public class SimpleMovement : MonoBehaviour
         Vector2 localScale = transform.localScale;
         Vector2 inputVector = new Vector2(_horizontal, _vertical);
 
-        Debug.Log("input" + inputVector);
-        Debug.Log(localScale);
         if (inputVector.normalized == -1 * localScale.normalized)
         {
             localScale.x *= -1;

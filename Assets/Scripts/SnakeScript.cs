@@ -11,6 +11,8 @@ public class SnakeScript : MonoBehaviour
     float headPosY;
     float distance;
     bool isReturning =false;
+
+    [SerializeField] private AudioClip _hissAudio;
     // Start is called before the first frame update
     void Start()
     {
@@ -36,6 +38,7 @@ public class SnakeScript : MonoBehaviour
     {
         if(other.tag=="Player")
         {
+            SFXManager.PlayClip(_hissAudio);
             isReturning=false;
             distance=Mathf.Sqrt(Mathf.Pow(head.transform.position.x-other.transform.position.x, 2f)+(Mathf.Pow(head.transform.position.y-other.transform.position.y, 2f)))*SnakeSpeed;
             if(distance<0.1f)
