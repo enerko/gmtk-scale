@@ -886,7 +886,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69004dc8fff50a44caa9bc5d5ff0645d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currantColor: 1
   scaleAmount: 0
+  _animPlayer: {fileID: 0}
+  _player: {fileID: 0}
+  _sprites: []
+  _blue: {r: 0, g: 0, b: 0, a: 0}
+  _green: {r: 0, g: 0, b: 0, a: 0}
+  _red: {r: 0, g: 0, b: 0, a: 0}
+  _yellow: {r: 0, g: 0, b: 0, a: 0}
+  _brown: {r: 0, g: 0, b: 0, a: 0}
+  _purple: {r: 0, g: 0, b: 0, a: 0}
+  _clip: {fileID: 8300000, guid: f5d77a65a9879a642813f7f962462261, type: 3}
 --- !u!1 &5694409566265686790
 GameObject:
   m_ObjectHideFlags: 0

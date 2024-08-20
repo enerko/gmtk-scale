@@ -8,6 +8,18 @@ public class ScaleWheel : MonoBehaviour
     [SerializeField] private
     int scaleAmount=-1;
     bool delay=false;
+    [SerializeField] private GameObject _animPlayer;
+    [SerializeField] private GameObject _player;
+    [SerializeField] private GameObject[] _sprites;
+    [SerializeField] private Color _blue;
+    [SerializeField] private Color _green;
+    [SerializeField] private Color _red;
+    [SerializeField] private Color _yellow;
+    [SerializeField] private Color _brown;
+    [SerializeField] private Color _purple;
+    [SerializeField] private AudioClip _clip;
+
+    private Animator _animator;
     // Start is called before the first frame update
     public void increaseScales()
     {
@@ -28,6 +40,9 @@ public class ScaleWheel : MonoBehaviour
     void Start()
     {
         delay=false;
+        _animator = _animPlayer.GetComponent<Animator>();
+        _player.SetActive(true);
+        _animPlayer.SetActive(false);
     }
     void Update()
     {
@@ -81,38 +96,74 @@ public class ScaleWheel : MonoBehaviour
         transform.GetChild(11).gameObject.SetActive(false);
         transform.GetChild(12).gameObject.SetActive(false);
     }
+
+    private void StartChangingColor()
+    {
+        _player.SetActive(false);
+        _animPlayer.SetActive(true);
+        _animator.SetBool("IsChangingColor", true);
+        SFXManager.PlayClip(_clip);
+    }
+
+    private void StopChangingColor()
+    {
+        _animator.SetBool("IsChangingColor", false);
+        _animPlayer.SetActive(false);
+        _player.SetActive(true);
+        
+    }
+    private void ChangeColor(Color color)
+    {
+        // Color changing logic but it turns transparent rn, idk why
+        for (int i = 0; i < _sprites.Length; i++)
+        {
+            SpriteRenderer spr = _sprites[i].GetComponent<SpriteRenderer>();
+            spr.color = color;
+        }
+    }
     IEnumerator changeBlue()
     {
+        StartChangingColor();
         EmptyTail();
         transform.GetChild(6).gameObject.SetActive(true);
         yield return new WaitForSeconds(3);
+        
         currantColor=1;
         transform.GetChild(6).gameObject.SetActive(false);
         transform.GetChild(7).gameObject.SetActive(true);
         delay=false;
+        StopChangingColor();
+        ChangeColor(_blue);
     }
     IEnumerator changeRed()
     {
+        StartChangingColor();
         EmptyTail();
         transform.GetChild(6).gameObject.SetActive(true);
         yield return new WaitForSeconds(3);
+        ChangeColor(_red);
         currantColor=2;
         transform.GetChild(6).gameObject.SetActive(false);
         transform.GetChild(8).gameObject.SetActive(true);
         delay=false;
+        StopChangingColor();
     }
     IEnumerator changeGreen()
     {
+        StartChangingColor();
         EmptyTail();
         transform.GetChild(6).gameObject.SetActive(true);
         yield return new WaitForSeconds(3);
-        currantColor=3;
+        ChangeColor(_red);
+        currantColor =3;
         transform.GetChild(6).gameObject.SetActive(false);
         transform.GetChild(9).gameObject.SetActive(true);
         delay=false;
+        StopChangingColor();
     }
     IEnumerator changeBrown()
     {
+        StartChangingColor();
         EmptyTail();
         transform.GetChild(6).gameObject.SetActive(true);
         yield return new WaitForSeconds(3);
@@ -120,9 +171,11 @@ public class ScaleWheel : MonoBehaviour
         transform.GetChild(6).gameObject.SetActive(false);
         transform.GetChild(10).gameObject.SetActive(true);
         delay=false;
+        StopChangingColor();
     }
     IEnumerator changePurple()
     {
+        StartChangingColor();
         EmptyTail();
         transform.GetChild(6).gameObject.SetActive(true);
         yield return new WaitForSeconds(3);
@@ -130,9 +183,11 @@ public class ScaleWheel : MonoBehaviour
         transform.GetChild(6).gameObject.SetActive(false);
         transform.GetChild(11).gameObject.SetActive(true);
         delay=false;
+        StopChangingColor();
     }
     IEnumerator changeYellow()
     {
+        StartChangingColor();
         EmptyTail();
         transform.GetChild(6).gameObject.SetActive(true);
         yield return new WaitForSeconds(3);
@@ -140,5 +195,6 @@ public class ScaleWheel : MonoBehaviour
         transform.GetChild(6).gameObject.SetActive(false);
         transform.GetChild(12).gameObject.SetActive(true);
         delay=false;
+        StopChangingColor();
     }
 }

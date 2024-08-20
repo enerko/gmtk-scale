@@ -52,15 +52,16 @@ public class SimpleMovement : MonoBehaviour
                 Flip();
             }
         }
-        if (!_isTouchingGround)
+        if (!IsGroundAhead() && _rb.velocity == Vector2.zero)
         {
             // Sometimes swinging causes player to flip 
             // If trigger is not touching ground, then rotate player
-            StartCoroutine(RotateUntilTouchingGround());
+            // StartCoroutine(RotateUntilTouchingGround());
         }
-        if (_isTouchingGround)
+        if (IsGroundAhead())
         {
-            SFXManager.PlayClip(walkAudio);
+            // sound bugging out
+            // SFXManager.PlayClip(walkAudio);
         }
         if (IsGroundAhead())
         {
@@ -71,7 +72,7 @@ public class SimpleMovement : MonoBehaviour
     }
     private IEnumerator RotateUntilTouchingGround()
     {
-        while (!_isTouchingGround)
+        while (!IsGroundAhead())
         {
             // Rotate the object
             _collider.enabled = false;
@@ -134,28 +135,35 @@ public class SimpleMovement : MonoBehaviour
     private void Flip()
     {
         Vector2 localScale = transform.localScale;
-        Vector2 inputVector = new Vector2(_horizontal, _vertical);
+        float angleUp = Vector2.Angle(transform.up, Vector2.up);
+        if (Mathf.Abs(angleUp) < _angleTolerance * 2)
+        { 
+            // player facing up
+            if (_horizontal * _direction < 0)
+            {
+                localScale.x = -1;
+            }
+            else if (_horizontal * _direction > 0) 
+            {
+                localScale.x = 1;
+            }
 
-        if (inputVector.normalized == -1 * localScale.normalized)
-        {
-            localScale.x *= -1;
         }
-
-        // Apply the updated scale
+        if (Mathf.Abs(angleUp - 180f) < _angleTolerance * 2)
+        {
+            // player facing down
+            if (_horizontal * _direction > 0)
+            {
+                localScale.x = -1;
+            }
+            else if (_horizontal * _direction < 0)
+            {
+                localScale.x = 1;
+            }
+        }
         transform.localScale = localScale;
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.tag == "Path")
-        {
-            _isTouchingGround = true;
-        }
-        else
-        {
-            _isTouchingGround = false;
-        }
-    }
 
     private bool IsTouching(LayerMask layer)
     {

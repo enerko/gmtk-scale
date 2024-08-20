@@ -1162,6 +1162,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currantColor: 1
   scaleAmount: -1
+  _animPlayer: {fileID: 0}
+  _player: {fileID: 0}
+  _sprites:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  _blue: {r: 0.2901961, g: 0.6039216, b: 0.9058824, a: 0}
+  _green: {r: 0, g: 0.34901962, b: 0.33333334, a: 0}
+  _red: {r: 1, g: 0.0990566, b: 0.0990566, a: 0}
+  _yellow: {r: 0, g: 0, b: 0, a: 0}
+  _brown: {r: 0, g: 0, b: 0, a: 0}
+  _purple: {r: 0, g: 0, b: 0, a: 0}
+  _clip: {fileID: 8300000, guid: f5d77a65a9879a642813f7f962462261, type: 3}
 --- !u!1 &8773801097756076724
 GameObject:
   m_ObjectHideFlags: 0
