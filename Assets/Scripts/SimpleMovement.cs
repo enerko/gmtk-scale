@@ -52,11 +52,11 @@ public class SimpleMovement : MonoBehaviour
                 Flip();
             }
         }
-        else if (_isTouchingGround)
+        if (!_isTouchingGround)
         {
             // Sometimes swinging causes player to flip 
             // If trigger is not touching ground, then rotate player
-            RotatePlayer();
+            StartCoroutine(RotateUntilTouchingGround());
         }
         if (IsGroundAhead())
         {
@@ -67,7 +67,7 @@ public class SimpleMovement : MonoBehaviour
     }
     private IEnumerator RotateUntilTouchingGround()
     {
-        while (!IsTouching(_groundLayer))
+        while (!_isTouchingGround)
         {
             // Rotate the object
             _collider.enabled = false;
