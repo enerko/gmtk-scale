@@ -14,9 +14,10 @@ public class SimpleMovement : MonoBehaviour
     public AudioClip walkAudio;
     private Collider2D _collider;
     private bool _isTouchingGround;
+    [SerializeField] private float _checkDistance = 1f;
 
     [SerializeField] private Vector2 _boxSize = new Vector2(1f, 0.34f);
-    [SerializeField] private Vector2 _offset = new Vector2(-0.85f, 0.43f);
+    [SerializeField] private Vector3 _offset = new Vector2(-1f, 0.43f);
     [SerializeField] private float _groundCastDistance = 1f;
     [SerializeField] private float _topCastDistance = 1f;
     [SerializeField] private LayerMask _groundLayer;
@@ -51,10 +52,15 @@ public class SimpleMovement : MonoBehaviour
                 Flip();
             }
         }
-        else if (!_isTouchingGround)
+        else if (_isTouchingGround)
         {
             // Sometimes swinging causes player to flip 
+            // If trigger is not touching ground, then rotate player
             RotatePlayer();
+        }
+        if (IsGroundAhead())
+        {
+            _rb.velocity += (Vector2)(-transform.up * _downwardForce);
         }
         _rb.velocity = new Vector2(_horizontal * _moveSpeed, _vertical * _moveSpeed);
 
@@ -72,6 +78,15 @@ public class SimpleMovement : MonoBehaviour
             yield return null;
         }
         _collider.enabled = true;
+    }
+
+    public bool IsGroundAhead()
+    {
+        RaycastHit2D hit = Physics2D.Raycast(transform.position + _offset, -transform.up, _checkDistance, _groundLayer);
+
+        Debug.DrawRay(transform.position + _offset, -transform.up * _checkDistance, Color.red);
+
+        return hit.collider != null;
     }
 
     private void RotatePlayer()
