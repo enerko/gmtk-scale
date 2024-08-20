@@ -20,9 +20,9 @@ public class StageManager : MonoBehaviour
     {
         string currentSceneName = SceneManager.GetActiveScene().name;
 
-        if (currentSceneName == "Cave")
+        if (currentSceneName == "Level 1")
         {
-            SceneManager.LoadScene("Forest");
+            SceneManager.LoadScene("Level 4");
         }
         /*else if (currentSceneName == "Forest")
         {

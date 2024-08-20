@@ -29,10 +29,15 @@ public class SwingScript : MonoBehaviour
     {
         _rb = GetComponent<Rigidbody2D>();
         transform.GetComponent<DistanceJoint2D>().enabled=false;
+        tongue.transform.position=transform.TransformPoint(transform.GetComponent<DistanceJoint2D>().anchor);
     }
 
     void Update()
     {
+        if(!isExtending &&!isRetracting &&!isSwinging)
+        {
+            tongue.transform.position=transform.TransformPoint(transform.GetComponent<DistanceJoint2D>().anchor);
+        }
         if(!IsGrounded())
         {
             Physics2D.gravity = new Vector2(0, -9.8f);
