@@ -21,6 +21,10 @@ public class SwingScript : MonoBehaviour
 
     private Vector3 _direction; // 1 if facing right, -1 if facing left
 
+    [SerializeField] private AudioClip _tongueShoot;
+    [SerializeField] private AudioClip _tongueRelease;
+    [SerializeField] private AudioClip _tongueOverheat;
+
     void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
@@ -113,10 +117,12 @@ public class SwingScript : MonoBehaviour
     public void foundPath()
     {
         isFound=true;
+        SFXManager.PlayClip(_tongueShoot);
     }
     public void OverHeat()
     {
         isOverheated=true;
+
     }
     public void CoolDown()
     {
@@ -124,6 +130,7 @@ public class SwingScript : MonoBehaviour
     }
     private void retract()
     {
+        SFXManager.PlayClip(_tongueRelease);
         isRetracting=true;
         isSwinging=false;
         isExtending=false;

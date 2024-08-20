@@ -9,12 +9,14 @@ public class SimpleMovement : MonoBehaviour
     private float _vertical;
     private float _moveSpeed = 5f;
     private int _direction = -1;
+    private float _rotationSpeed = 10f;
 
     public AudioClip walkAudio;
 
     [SerializeField] private Vector2 _boxSize = new Vector2(1f, 0.34f);
     [SerializeField] private Vector2 _offset = new Vector2(-0.85f, 0.43f);
     [SerializeField] private float _groundCastDistance = 1f;
+    [SerializeField] private float _topCastDistance = 1f;
     [SerializeField] private LayerMask _groundLayer;
     [SerializeField] private LayerMask _cornerLayer;
     [SerializeField] private float _downwardForce;
@@ -46,17 +48,27 @@ public class SimpleMovement : MonoBehaviour
             }
             
         }
-        
 
-        if(!IsTouching(_groundLayer))
+        if (!IsTouching(_groundLayer))
         {
-            _rb.velocity += (Vector2)(-transform.up) * _downwardForce;
-            SFXManager.PlayClip(walkAudio);
+            StartCoroutine(RotateUntilTouchingGround());
         }
+
         _rb.velocity = new Vector2(_horizontal * _moveSpeed, _vertical * _moveSpeed);
         
         Debug.Log(walkAudio);
 
+    }
+    private IEnumerator RotateUntilTouchingGround()
+    {
+        while (!IsTouching(_groundLayer))
+        {
+            // Rotate the object
+            transform.Rotate(0, 0, _rotationSpeed * Time.deltaTime);
+
+            // Yield control back to the game loop
+            yield return null;
+        }
     }
 
     private void CheckDirection()
@@ -79,6 +91,16 @@ public class SimpleMovement : MonoBehaviour
                 _horizontal = 0;
             }
         }
+    }
+
+    private bool IsBackTouching(LayerMask layer)
+    {
+        // Calculate the rotated offset
+        Vector3 rotatedOffset = transform.rotation * _offset;
+
+        // Check if the player is grounded
+        RaycastHit2D hit = Physics2D.BoxCast(transform.position + rotatedOffset, _boxSize, transform.eulerAngles.z, transform.up, _topCastDistance, layer);
+        return hit.collider != null;
     }
 
     private void Flip()
@@ -116,5 +138,10 @@ public class SimpleMovement : MonoBehaviour
         Gizmos.color = Color.blue;
         Vector3 groundBoxCenter = transform.position + rotatedOffset - transform.up * (_groundCastDistance / 2);
         Gizmos.DrawWireCube(groundBoxCenter, _boxSize);
+
+        // Ground detection box
+        Gizmos.color = Color.blue;
+        Vector3 topBox = transform.position + rotatedOffset + transform.up * (_topCastDistance / 2);
+        Gizmos.DrawWireCube(topBox, _boxSize);
     }
 }

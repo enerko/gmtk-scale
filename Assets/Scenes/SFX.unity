@@ -214,6 +214,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Canvas3
       objectReference: {fileID: 0}
+    - target: {fileID: 7582912552515882430, guid: 3ac59a423e56a7f4aadc531902d82bbd, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 1313767777064857223}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -281,7 +285,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8709000301006992433, guid: a1f1eccae828b1a4389b830f4bf1b139, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -10451,6 +10455,18 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5120417452548328626, guid: 3b438ed2c89228e4cb7e6e8c7d472ea1, type: 3}
+      propertyPath: _tongueShoot
+      value: 
+      objectReference: {fileID: 8300000, guid: 70c3d32bc97690945a5f73b164de929d, type: 3}
+    - target: {fileID: 5120417452548328626, guid: 3b438ed2c89228e4cb7e6e8c7d472ea1, type: 3}
+      propertyPath: _tongueRelease
+      value: 
+      objectReference: {fileID: 8300000, guid: bed7282b68b04d14fb13000274ac8c2f, type: 3}
+    - target: {fileID: 5120417452548328626, guid: 3b438ed2c89228e4cb7e6e8c7d472ea1, type: 3}
+      propertyPath: _tongueOverheat
+      value: 
+      objectReference: {fileID: 8300000, guid: e5dee55962124bd4d8978822ec64857b, type: 3}
     - target: {fileID: 5173728530999191004, guid: 3b438ed2c89228e4cb7e6e8c7d472ea1, type: 3}
       propertyPath: m_LocalRotation.w
       value: 0.9865327
